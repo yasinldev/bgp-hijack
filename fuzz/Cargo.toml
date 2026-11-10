@@ -10,6 +10,7 @@ cargo-fuzz = true
 [dependencies]
 libfuzzer-sys = "=0.4.13"
 bgp-hijack-core = { path = "../crates/core" }
+bgp-hijack-analysis = { path = "../crates/analysis" }
 
 [[bin]]
 name = "framing"
@@ -28,3 +29,24 @@ bench = false
 [workspace]
 members = ["."]
 resolver = "3"
+
+[[bin]]
+name = "updates"
+path = "fuzz_targets/updates.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "mrt"
+path = "fuzz_targets/mrt.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "tcp"
+path = "fuzz_targets/tcp.rs"
+test = false
+doc = false
+bench = false

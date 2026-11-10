@@ -1,0 +1,27 @@
+[
+  {
+    "target": "updates",
+    "name": "ipv4-announce",
+    "hex": "0000001440010100400206020100010000400304c000020118cb0071"
+  },
+  {
+    "target": "updates",
+    "name": "ipv6-withdraw",
+    "hex": "0000000b800f080002012020010db8"
+  },
+  {
+    "target": "mrt",
+    "name": "peer-index",
+    "hex": "000d0001c00002010000000102c0000202c000020200010000"
+  },
+  {
+    "target": "mrt",
+    "name": "state-change",
+    "hex": "00100005000100000001000100000001c0000201c000020200060001"
+  },
+  {
+    "target": "tcp",
+    "name": "wrap-start",
+    "hex": "ffffff7f01020304"
+  }
+]

@@ -91,9 +91,11 @@
     ]
   },
   "live_lab": {
-    "status": "pending",
-    "two_cycles_completed": false,
-    "reason": "Initial preflight requires interactive sudo authentication; no live lab result has been provided."
+    "status": "passed",
+    "two_cycles_completed": true,
+    "summary_sha256": "dfa2f4df8f109f190700e796098a8fff6721b080a29674ab9c7a7f9bc3343889",
+    "source": "artifacts/lab-s02-local/summary.json",
+    "note": "Reconciled from actual local acceptance; independent review and remote CI remain pending."
   },
   "lockfiles": {
     "Cargo.lock": "44ec754abd02b34902522020a018e2f7149f025a65acb1c21e52da7f2c1006d0",

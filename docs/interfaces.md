@@ -1,6 +1,8 @@
 # CLI, configuration, and artifacts
 
-**Status: partially implemented (Sprint 2).** The public binary implements `validate --static`. Core configuration/evidence types and durable journal writing/reading are available. Live validation, `run`, artifact-based `report`, and the referenced five-role fixture remain planned. Separate developer lab/fuzz tools are described in the [development guide](development.md).
+**Passive-analysis scope update:** AN03–AN07 now provides lab-independent lookup, file inspection, RIS Live recording, and offline change reports. See [Passive analysis](passive-analysis.md) for implemented commands, schema, bounds, and limitations. The active lab requirements below remain deferred; M1–M4 are not closed by passive analysis.
+
+**Status: the following section describes the deferred lab interface.** The lab interface implements `validate --static`; the passive command contract is linked above. Core configuration/evidence types and durable journal writing/reading are available. Live validation, `run`, artifact-based `report`, and the referenced five-role fixture remain planned. Separate developer lab/fuzz tools are described in the [development guide](development.md).
 
 ## Commands
 

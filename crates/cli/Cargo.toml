@@ -5,13 +5,14 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 publish.workspace = true
-description = "Offline configuration validation for BGP Hijack Lab"
+description = "Passive BGP analysis and isolated routing lab tools"
 
 [[bin]]
 name = "bgp-hijack"
 path = "src/main.rs"
 
 [dependencies]
+bgp-hijack-analysis = { path = "../analysis" }
 bgp-hijack-core = { path = "../core" }
 clap.workspace = true
 serde_json.workspace = true

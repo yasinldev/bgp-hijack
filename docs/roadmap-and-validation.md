@@ -1,5 +1,7 @@
 # Roadmap and validation
 
+**Passive-analysis scope update:** AN03–AN07 now provides lab-independent lookup, file inspection, RIS Live recording, and offline change reports. See [Passive analysis](passive-analysis.md) for implemented commands, schema, bounds, and limitations. The active lab requirements below remain deferred; M1–M4 are not closed by passive analysis.
+
 **Status: implementation started; M1-M4 gates remain open.** Sprint 2 adds framing/control-message codecs, durable journals, a minimal FRR fixture, and fuzz tools to the Sprint 1 foundation. Local verification and outstanding acceptance/review evidence are recorded in the [Sprint 2 implementation record](sprint-plan.md#sprint-2-implementation-record). This does not establish session interoperability or scenario acceptance.
 
 The [sprint plan](sprint-plan.md) turns these gates into a 10-sprint baseline for two developers working in two-week sprints. It contains ticket ownership, dependencies, estimates, demos, and contingency rules. The schedule remains a forecast; gate evidence determines completion.

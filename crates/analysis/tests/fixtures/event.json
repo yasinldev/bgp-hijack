@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "run_id": "test",
+  "sequence": 1,
+  "received_at": "2026-11-10T00:00:00Z",
+  "elapsed_ms": 1,
+  "evidence_refs": [
+    "fixture"
+  ],
+  "observation": {
+    "kind": "route",
+    "source": {
+      "source": "fixture",
+      "collector": "rrc00",
+      "peer": "a",
+      "epoch": 1
+    },
+    "source_time": 1.0,
+    "prefix": "203.0.113.0/24",
+    "path_id": null,
+    "action": "announce",
+    "attributes": {
+      "origin": null,
+      "path": [
+        {
+          "kind": 2,
+          "asns": [
+            64496,
+            65536
+          ]
+        }
+      ],
+      "next_hops": [],
+      "raw": [],
+      "warnings": []
+    },
+    "address_family": "ipv4"
+  }
+}

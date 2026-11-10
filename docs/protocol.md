@@ -1,6 +1,8 @@
 # BGP protocol contract
 
-**Status: partially implemented (Sprint 2).** Bounded framing, OPEN/capabilities, KEEPALIVE, NOTIFICATION and pure OPEN compatibility checks are implemented. UPDATE bodies, FSM/TCP sessions and route state remain planned. This document defines the first-release contract; see the [development guide](development.md#codec-api) for current API behavior and the sprint record for actual validation evidence.
+**Passive-analysis scope update:** AN03–AN07 now provides lab-independent lookup, file inspection, RIS Live recording, and offline change reports. See [Passive analysis](passive-analysis.md) for implemented commands, schema, bounds, and limitations. The active lab requirements below remain deferred; M1–M4 are not closed by passive analysis.
+
+**Status: control codec and passive UPDATE decoder implemented; active session contract deferred.** Bounded framing, OPEN/capabilities, KEEPALIVE, NOTIFICATION and pure OPEN compatibility checks are implemented. Passive IPv4/IPv6 UPDATE bodies and analysis state are implemented. FSM/TCP speaker sessions and active route handling remain deferred. This document defines the first-release contract; see the [development guide](development.md#codec-api) for current API behavior and the sprint record for actual validation evidence.
 
 ## Supported subset
 

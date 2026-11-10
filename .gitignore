@@ -1,6 +1,6 @@
 /target/
 /artifacts/
-/clab-*/
+clab-*/
 /fuzz/target/
 /fuzz/artifacts/
 /.cache/

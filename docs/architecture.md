@@ -1,8 +1,31 @@
 # Architecture
 
-**Status: partially implemented (Sprint 2).** Shared models, static validation, pure evaluation, CLI scaffolding, control-message codecs and durable journals are implemented. A minimal developer lab tool is available. The session engine, scenario lab adapter, route store and packet observation components remain planned; the [development guide](development.md) describes current boundaries.
+**Passive-analysis scope update:** AN03–AN07 now provides lab-independent lookup, file inspection, RIS Live recording, and offline change reports. See [Passive analysis](passive-analysis.md) for implemented commands, schema, bounds, and limitations. The active lab requirements below remain deferred; M1–M4 are not closed by passive analysis.
 
-## Component boundaries
+**Status: passive architecture implemented; active architecture deferred.** Shared models, static validation, pure evaluation, CLI scaffolding, control-message codecs and durable journals are implemented. A minimal developer lab tool is available. The session engine, scenario lab adapter, active route store and live packet observation components remain planned; the [development guide](development.md) describes current boundaries.
+
+## Implemented passive path
+
+```mermaid
+flowchart LR
+    CLI["CLI"] --> Lookup["RIPEstat adapter"]
+    CLI --> Files["MRT and PCAP readers"]
+    CLI --> Live["RIS Live adapter"]
+    Files --> Codec["Custom BGP decoder"]
+    Codec --> Events["Normalized observations"]
+    Live --> Queue["Bounded queue"]
+    Queue --> Events
+    Events --> Bundle["Durable evidence bundle"]
+    Bundle --> State["Source-local state and rules"]
+    State --> Report["Offline report"]
+```
+
+`bgp-hijack-analysis` owns these adapters, passive state, and reporting. The existing lab
+configuration/evidence schema remains separate. Sources and epochs prevent combining unrelated
+paths; recording and replay use the same rule engine. The architecture below describes deferred
+active experiments.
+
+## Deferred active component boundaries
 
 The custom engine uses Rust. Tokio will provide asynchronous I/O and timers, Clap defines the CLI, and Serde handles configuration and artifact serialization. The workspace pins dependency/toolchain versions; runtime metadata will identify the versions used for each experiment.
 

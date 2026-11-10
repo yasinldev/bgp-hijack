@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "recorded_date": "2026-11-10",
+  "implementation_status": "implemented_review_pending",
+  "work_packages": [
+    "AN03-A1",
+    "AN03-A2",
+    "AN03-A3",
+    "AN03-B1",
+    "AN03-B2",
+    "AN03-B3",
+    "AN04-A1",
+    "AN04-A2",
+    "AN04-A3",
+    "AN04-B1",
+    "AN04-B2",
+    "AN04-B3",
+    "AN05-A1",
+    "AN05-A2",
+    "AN05-A3",
+    "AN05-B1",
+    "AN05-B2",
+    "AN05-B3",
+    "AN06-A1",
+    "AN06-A2",
+    "AN06-A3",
+    "AN06-B1",
+    "AN06-B2",
+    "AN06-B3",
+    "AN07-A1",
+    "AN07-A2",
+    "AN07-A3",
+    "AN07-B1",
+    "AN07-B2",
+    "AN07-B3"
+  ],
+  "toolchain": "1.93.1",
+  "local_checks": [
+    {
+      "command": "cargo fmt --all -- --check",
+      "exit_code": 0,
+      "seconds": 0.114,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "cargo clippy --workspace --all-targets --locked -- -D warnings",
+      "exit_code": 0,
+      "seconds": 0.998,
+      "log_sha256": "fd2822cb110b5084e418c351bbb700a8578d7b598ee9d541f34d7fbcd51627f9"
+    },
+    {
+      "command": "cargo test --workspace --locked",
+      "exit_code": 0,
+      "seconds": 5.746,
+      "log_sha256": "61840a452cc52acaecb4917acb9bcf2a46a688d251db086a5b73a5c3f6d1bcc7",
+      "tests_passed": 65
+    },
+    {
+      "command": "cargo build --workspace --locked",
+      "exit_code": 0,
+      "seconds": 2.113,
+      "log_sha256": "28252a0216aa2a75654216da1e2d76465af7507af13811ac39e7a5127ce4bc4b"
+    },
+    {
+      "command": "cargo build --workspace --release --locked",
+      "exit_code": 0,
+      "seconds": 5.246,
+      "log_sha256": "7cc74c6eb711c53b641a06d3fdab20a85c3ee33c9a5a2ad48e0cde4fe7e61996"
+    },
+    {
+      "command": "python3 -m unittest discover -s tools/tests -v",
+      "exit_code": 0,
+      "seconds": 0.048,
+      "log_sha256": "f054a97be237ebf8f0589edf3653f8f60575104fc632af101fca0dcf20fafd12"
+    }
+  ],
+  "additional_capture_check": {
+    "command": "cargo test -p bgp-hijack-analysis pcap_and_pcapng_full_session_and_explicit_context --locked",
+    "result": "passed",
+    "formats": [
+      "PCAP",
+      "PCAPNG multi-interface",
+      "Ethernet",
+      "VLAN",
+      "raw IPv4",
+      "raw IPv6",
+      "SLL",
+      "SLL2"
+    ]
+  },
+  "fuzz": {
+    "nightly": "nightly-2026-11-09",
+    "cargo_fuzz": "0.13.2",
+    "libfuzzer_sys": "0.4.13",
+    "timeout_seconds": 2,
+    "rss_limit_mib": 1024,
+    "targets": [
+      {
+        "name": "updates",
+        "executions": 16603385,
+        "seconds": 601,
+        "exit_code": 0,
+        "failure_artifacts": [],
+        "seed": 1,
+        "lock_sha256": "5f3d180aabe6e94629fbdd81f937d8648d054f33792fa552a07d5c5d88af40a2",
+        "seed_sha256": {
+          "ipv4-announce": "b86a9f668a843ea0a77ef879ea207b8e9098f0f82abf023125b2dfc9a81f3027",
+          "ipv6-withdraw": "6bbc1b76e05d0cbbb014d42d561abcc8c5be3296c8e949b6e8a3202a704dcdaa"
+        },
+        "log_sha256": "3072cf59d3b7abdab5f6e2daa593df76991d2c5ed9ea6400c3528cb59a9d4600"
+      },
+      {
+        "name": "mrt",
+        "executions": 28706518,
+        "seconds": 601,
+        "exit_code": 0,
+        "failure_artifacts": [],
+        "seed": 1,
+        "lock_sha256": "5f3d180aabe6e94629fbdd81f937d8648d054f33792fa552a07d5c5d88af40a2",
+        "seed_sha256": {
+          "peer-index": "88ec2fafe806a833471ee0dd4d638a595c9a9b9b5ce9db9571127d1e90a8cebe",
+          "state-change": "7aa30b9c75849b41b63e826baeff272ed0b0330139535d52c425fa3710891bb7"
+        },
+        "log_sha256": "ea2351040c440c4119873ff5b22faa899481afc23476bcf214cb61dd26933d59"
+      },
+      {
+        "name": "tcp",
+        "executions": 26056292,
+        "seconds": 601,
+        "exit_code": 0,
+        "failure_artifacts": [],
+        "seed": 1,
+        "lock_sha256": "5f3d180aabe6e94629fbdd81f937d8648d054f33792fa552a07d5c5d88af40a2",
+        "seed_sha256": {
+          "wrap-start": "c950059743e704c407f9f6a6eb35358f9259a08082d770bddd0b25791b125247"
+        },
+        "log_sha256": "43dfd06fab69dd96d00a8b738f62b34712d75a9a8330fdf155b6c4f65fe3ce93"
+      }
+    ]
+  },
+  "online_smoke": [
+    {
+      "command": [
+        "lookup",
+        "ip",
+        "193.0.0.1",
+        "--format",
+        "json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.605
+    },
+    {
+      "command": [
+        "lookup",
+        "ip",
+        "2001:67c:2e8::1",
+        "--format",
+        "json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.146
+    },
+    {
+      "command": [
+        "lookup",
+        "prefix",
+        "193.0.0.0/21",
+        "--format",
+        "json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.251
+    },
+    {
+      "command": [
+        "lookup",
+        "asn",
+        "AS3333",
+        "--format",
+        "json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.392
+    },
+    {
+      "command": [
+        "watch",
+        "routes",
+        "--prefix",
+        "193.0.0.0/21",
+        "--prefix",
+        "2001:67c:2e8::/48",
+        "--collector",
+        "rrc00",
+        "--duration",
+        "20",
+        "--output",
+        "artifacts/an03-an07-live/watch"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 20.015
+    }
+  ],
+  "measurements": {
+    "benchmark": {
+      "exit_code": 0,
+      "wall_seconds": 0.629958812998666,
+      "input_bytes": 43033,
+      "rib_entries": 1000,
+      "workload": "Repeated single-prefix independent fixture, release build; not a capacity guarantee",
+      "peak_rss_kib": 6128,
+      "summary": {
+        "coverage": "selected_input",
+        "events": 1000,
+        "findings": [],
+        "gaps": [],
+        "metrics": {
+          "durable_write_ms": 607.5983130000003,
+          "duration_seconds": 0.61827853,
+          "events_per_second": 1617.3919528235492,
+          "max_durable_write_ms": 1.874623,
+          "output_bytes": 719705.0
+        },
+        "processing_status": "completed",
+        "routes": 1,
+        "run_id": "1794278378576044770-55181",
+        "schema_version": 1
+      },
+      "resource_log_sha256": "deceba752ee79f06c2f3c0d456acc034caf3cb717e04f8ae16ecc48638e90ebf"
+    },
+    "interrupt": {
+      "exit_code": 130,
+      "manifest_complete": false
+    },
+    "live_watch_final": {
+      "exit_code": 0,
+      "summary": {
+        "coverage": "selected_input",
+        "events": 2,
+        "findings": [],
+        "gaps": [],
+        "metrics": {
+          "durable_write_ms": 1.337825,
+          "duration_seconds": 20.001741552,
+          "events_per_second": 0.0999912898937256,
+          "max_durable_write_ms": 0.7296320000000001,
+          "output_bytes": 1149.0,
+          "queue_peak_bytes": 194.0
+        },
+        "processing_status": "completed",
+        "routes": 0,
+        "run_id": "1794278379332663100-55201",
+        "schema_version": 1
+      }
+    }
+  },
+  "remote_ci": "not_run",
+  "independent_developer_review": "pending",
+  "active_milestones": "M1-M4 deferred; no Rust-FRR session or active scenario claimed",
+  "known_scope_limits": [
+    "No initial RIS Live RIB; observations describe selected sources, not global visibility.",
+    "Active BGP speaker/session engine, route advertisements, lab scenarios and live capture remain deferred.",
+    "MRT legacy TABLE_DUMP, unsupported AFI/SAFI, messages above 4096 bytes, fragmented IP and timestamp-less PCAPNG simple packets produce partial coverage.",
+    "Bundle hashes are integrity checks relative to the local manifest, not authenticated source signatures."
+  ],
+  "local_artifact_directories": [
+    "artifacts/an03-an07-checks",
+    "artifacts/an03-an07-fuzz",
+    "artifacts/an03-an07-live",
+    "artifacts/an03-an07-measurements-final"
+  ],
+  "source_locks": {
+    "Cargo.lock": "84b3b569b5cb48f71d45abe5457094c2228420a5c6e5de55c684687d283e8e0f",
+    "fuzz/Cargo.lock": "5f3d180aabe6e94629fbdd81f937d8648d054f33792fa552a07d5c5d88af40a2"
+  },
+  "additional_mrt_check": {
+    "command": "cargo test -p bgp-hijack-analysis mrt_peer_index_and_rib_independent_bytes --locked",
+    "result": "passed",
+    "coverage": [
+      "IPv4 RIB",
+      "IPv6 abbreviated MP_REACH next hop",
+      "RIB ADD-PATH path ID",
+      "truncated records"
+    ]
+  }
+}

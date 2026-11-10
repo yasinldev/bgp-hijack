@@ -1,14 +1,16 @@
 # Product definition
 
+**Passive-analysis scope update:** AN03–AN07 now provides lab-independent lookup, file inspection, RIS Live recording, and offline change reports. See [Passive analysis](passive-analysis.md) for implemented commands, schema, bounds, and limitations. The active lab requirements below remain deferred; M1–M4 are not closed by passive analysis.
+
 **Status: first-release target remains planned.** The current foundation includes static validation, model/evaluator contracts, control-message codecs, durable journals, and developer lab/fuzz tools. Full runtime capabilities below remain requirements for subsequent implementation; see the [root README](../README.md) for executable commands and acceptance status.
 
 ## Purpose and users
 
 `bgp-hijack` will let blue teams, red teams working in the reference lab, network engineers, and protocol researchers run repeatable routing experiments. A useful result will explain what changed in BGP, what happened to the selected test traffic, how a prefix filter responded, and whether the lab recovered.
 
-The first release will answer a concrete question: given a known topology and a declared prefix policy, does a controlled route change produce the expected forwarding or packet-drop behavior for IPv4 and IPv6?
+The future active release will answer a concrete question: given a known topology and a declared prefix policy, does a controlled route change produce the expected forwarding or packet-drop behavior for IPv4 and IPv6?
 
-## First-release scope
+## Deferred active-release scope
 
 | Area | Included |
 | --- | --- |
@@ -20,11 +22,11 @@ The first release will answer a concrete question: given a known topology and a 
 | Lifecycle | Preflight, baseline, scenario, observation, rollback, and recovery verification. |
 | Interface | Foreground CLI, YAML configuration, JSONL events, and a JSON report. |
 
-The first implementation is a scenario-specific BGP speaker, not a commitment to implementing every function of an Internet router. Its protocol subset and exclusions are defined in [Protocol](protocol.md).
+The future active implementation is a scenario-specific BGP speaker, not a commitment to implementing every function of an Internet router. Its protocol subset and exclusions are defined in [Protocol](protocol.md).
 
 ## Product boundary
 
-Active experiments will run only in the declared isolated lab. Reference fixtures will use documentation prefixes and private-use ASNs. Lab topology, neighbor inventory, and observed routes will supply prefix and ASN context; the first release will not perform reconnaissance against public targets or establish external production peers.
+Active experiments will run only in the declared isolated lab. Reference fixtures will use documentation prefixes and private-use ASNs. Lab topology, neighbor inventory, and observed routes will supply prefix and ASN context; the active release will not perform reconnaissance against public targets or establish external production peers.
 
 Topology isolation is an enforced runtime prerequisite. An acknowledgment flag or legal notice will not replace it. The requirements are described in [Lab and scenarios](lab-and-scenarios.md).
 

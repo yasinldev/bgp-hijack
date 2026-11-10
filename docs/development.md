@@ -1,5 +1,7 @@
 # Sprint 2 development tools
 
+**Passive-analysis scope update:** AN03–AN07 now provides lab-independent lookup, file inspection, RIS Live recording, and offline change reports. See [Passive analysis](passive-analysis.md) for implemented commands, schema, bounds, and limitations. The active lab requirements below remain deferred; M1–M4 are not closed by passive analysis.
+
 The core library implements bounded control-message decoding and durable JSONL recording. The developer lab and fuzz tools are separate from the public `bgp-hijack` CLI. The CLI still provides static configuration validation only. See the [sprint record](sprint-plan.md#sprint-2-implementation-record) for executed checks and outstanding acceptance evidence.
 
 ## Codec API

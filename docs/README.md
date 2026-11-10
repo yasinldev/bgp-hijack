@@ -1,13 +1,17 @@
 # BGP Hijack Lab documentation
 
-**Status: Sprint 2 increment implemented; acceptance evidence tracked separately.** The repository provides static validation, BGP framing/control-message codecs, durable event journals, and pure result evaluation. Developer lab/fuzz tools are available; live Rust sessions, UPDATE processing and scenarios remain planned. See the [root README](../README.md) and [sprint record](sprint-plan.md#sprint-2-implementation-record) for usage and verification status.
+**Passive-analysis scope update:** AN03–AN07 now provides lab-independent lookup, file inspection, RIS Live recording, and offline change reports. See [Passive analysis](passive-analysis.md) for implemented commands, schema, bounds, and limitations. The active lab requirements below remain deferred; M1–M4 are not closed by passive analysis.
 
-BGP Hijack Lab, working name `bgp-hijack`, is a routing research tool for isolated laboratories. It will correlate controlled BGP changes with measured packet delivery and prefix-filter behavior. Its first release will cover forwarding through an experiment node and controlled blackholing, for both IPv4 and IPv6.
+**Status: passive-analysis implementation available; acceptance evidence tracked separately.**
+The repository provides lab-independent lookup, MRT/capture inspection, filtered live observations,
+and reproducible reports, alongside the existing lab configuration validator and protocol foundation.
+Active Rust sessions and controlled traffic scenarios remain deferred.
 
 ## Reading order
 
 | Document | Questions it answers |
 | --- | --- |
+| [Passive analysis](passive-analysis.md) | How do the implemented lookup, inspect, watch, and report commands work? |
 | [Product](product.md) | Who is this for, what is in the first release, and what counts as success? |
 | [Architecture](architecture.md) | Which component owns each responsibility, and how does evidence flow? |
 | [Protocol](protocol.md) | Which BGP behaviors are supported, and how are sessions and routes handled? |
@@ -32,13 +36,16 @@ These decisions are the baseline for implementation, rather than a list of alter
 | D07 | Foreground CLI, JSONL events, JSON reports, and PCAPNG captures. | Make results inspectable and suitable for automated checks. |
 | D08 | Linux performs packet forwarding; Rust coordinates experiments and observations. | Keep the custom protocol scope focused on BGP. |
 | D09 | Active operations stay inside the declared isolated reference lab. | Make the experiment boundary explicit and testable. |
-| D10 | RPKI/ROV, external telemetry, service impersonation, and interactive interfaces follow the first release. | Establish a measurable end-to-end experiment first. |
+| D10 | RPKI/ROV, service impersonation, and interactive interfaces remain deferred; D17 advances passive external telemetry. | Establish a measurable end-to-end experiment first. |
 | D11 | Two developers working in two-week sprints. | Use the agreed team capacity for the sprint forecast and backlog; estimates remain revisable. |
 | D12 | Rust 1.93.1, edition 2024, resolver 3; exact direct dependency versions and a committed lockfile. | Make the foundation reproducible across local development and CI. |
 | D13 | Bounded serde-saphyr YAML parsing followed by strict typed deserialization with field paths. | Reject duplicate keys and implicit scalar coercion while preserving useful errors. |
 | D14 | `validate --static` is file-only and reports `runtime_verified: false`. | Distinguish implemented configuration checks from future live prerequisites. |
 | D15 | Every journal append flushes and synchronizes before returning success. | Give callers an explicit durability boundary before future lab mutations. |
 | D16 | Sprint 2 uses a local, two-node management-free fixture; fuzzing uses an isolated pinned nightly workspace. | Verify peer prerequisites independently while preserving the stable main toolchain and later scenario scope. |
+
+| D17 | AN03–AN07 prioritizes passive RIPEstat/RIS Live, MRT/capture analysis, and evidence-linked findings. | Make the CLI useful without a lab; preserve active isolation requirements. |
+| D18 | Capture decoding requires observed OPEN negotiation or explicit directional context. | Avoid guessing ASN width, ADD-PATH, or missing BGP boundaries. |
 
 The more detailed contracts belong to the linked documents: product owns scope, protocol owns wire behavior, lab and scenarios owns expected outcomes, and interfaces owns configuration and artifact names. The sprint plan owns implementation sequencing and capacity estimates; it does not override those contracts. Update this decision table when an accepted choice changes, together with its affected documents.
 
@@ -47,9 +54,9 @@ The more detailed contracts belong to the linked documents: product owns scope, 
 | Deliverable | State |
 | --- | --- |
 | Design documents | Present; requirements for future work |
-| Rust workspace and CLI | Static validation and command scaffolding implemented; live operations planned |
-| Configuration/evidence models and evaluator | Implemented, including bounded durable journals; artifact integrity verification planned |
-| BGP codec | Framing, OPEN, KEEPALIVE and NOTIFICATION implemented; UPDATE body processing planned |
+| Rust workspace and CLI | Passive commands and static validation implemented; active lab operations deferred |
+| Configuration/evidence models and evaluator | Implemented, including bounded durable journals; passive artifact integrity verification implemented; lab reporting deferred |
+| BGP codec | Framing, OPEN, KEEPALIVE and NOTIFICATION implemented; passive IPv4/IPv6 UPDATE processing implemented |
 | Containerlab topology and FRR fixtures | Minimal developer fixture implemented; live acceptance recorded separately; full scenario topology planned |
 | Scenario runner and packet recording | Planned |
 | Foundation tests | Configuration, JSON, verdict, and CLI tests implemented |

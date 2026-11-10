@@ -1,10 +1,10 @@
 # Sprint plan
 
-**Status: Sprint 2 implementation available; acceptance tracked below.** The [Sprint 1 record](#sprint-1-implementation-record) and [Sprint 2 record](#sprint-2-implementation-record) distinguish implemented work from executed checks and outstanding review/live evidence. Sprints 3-10 and M1-M4 acceptance gates remain planned.
+**Status: AN03–AN07 passive-analysis implementation available; acceptance tracked separately.** The [Sprint 1 record](#sprint-1-implementation-record) and [Sprint 2 record](#sprint-2-implementation-record) distinguish implemented work from executed checks and outstanding review/live evidence. Original S03–S10 active work and M1–M4 gates are deferred. See the passive track below.
 
 ## Planning basis
 
-The team consists of **two developers working in two-week sprints**, as agreed during planning. The baseline forecast is **10 sprints / 20 working weeks**. Allow up to two additional stabilization sprints if exit gates remain unmet, giving a provisional **20-24 week planning range**. This is an estimate, not a delivery commitment. No calendar start date has been assigned.
+The team consists of **two developers working in two-week sprints**, as agreed during planning. The original active-only baseline forecast was **10 sprints / 20 working weeks** and is superseded by the passive scope change. The former 20–24 week stabilization range is also superseded; the five passive sprints are budgeted independently and the active backlog must be reforecast. This is an estimate, not a delivery commitment. No calendar start date has been assigned.
 
 Assume both developers are available full time and can work in Rust and Linux networking. Each standard sprint has 20 gross person-days: 14 planned implementation/test days and 6 days reserved for review, integration, debugging, planning, and documentation. The backlog budgets seven implementation/test days per developer per sprint. Holidays, leave, operational work, or reduced availability reduce this capacity before sprint commitment.
 
@@ -116,7 +116,7 @@ Recorded **2026-11-10**. The implementation follows the accepted local-host and 
 | S02-A1 | `review` | Fixed-size incremental framing, terminal error state, EOF distinction and raw UPDATE frames. Independent fixtures exercise every split, coalescing, malformed headers and size boundaries. |
 | S02-A2 | `review` | OPEN, four-octet ASN and MP capabilities, extended optional lengths, and separate compatibility checks. Tests cover unknown/duplicate/conflicting capabilities, required families and wire-level error hints. |
 | S02-A3 | `review` | KEEPALIVE and NOTIFICATION encoding/decoding, preserving opaque notification data and supplying typed errors. |
-| S02-B1 | `in_progress` | Pinned two-node fixture, checksum-verified Containerlab installation, lifecycle/acceptance tools and five offline isolation tests implemented. Real two-cycle acceptance awaits local sudo authentication; initial agent preflight recorded that requirement. |
+| S02-B1 | `in_progress` | Pinned two-node fixture, checksum-verified Containerlab installation, lifecycle/acceptance tools and five offline isolation tests implemented. Actual local two-cycle acceptance passed, including negative isolation checks and repeated cleanup; evidence reconciled in the versioned record. |
 | S02-B2 | `review` | Initialized manifests, per-record write/flush/sync, injected I/O faults, controlled clock, bounded reader and truncated-prefix recovery implemented. Seven integration tests and two storage fault tests pass. |
 | S02-B3 | `review` | Eleven independently described byte fixtures, two pinned fuzz targets, runner and manual CI implemented. Both targets completed their 600-second budgets with exit code 0 and no failure artifacts. |
 
@@ -124,11 +124,52 @@ Local Rust 1.93.1 checks passed: `cargo fmt --all -- --check`, Clippy with `-D w
 
 Both fuzz targets reported normal completion after 601 seconds, using seed 1, nightly-2026-11-09, cargo-fuzz 0.13.2 and libfuzzer-sys 0.4.13. No crash, timeout, or RSS-limit failure was recorded. The [versioned evidence summary](evidence/sprint-2.json) records run counts, input limits, seed/log/lockfile hashes, tool versions and the outstanding live-lab condition. These are bounded fuzz observations, not a proof of complete correctness or a performance guarantee.
 
-Containerlab 0.83.0 was downloaded and its archive/binary hashes verified. FRR 10.7.1's exact manifest digest and both Containerlab hashes are retained in the [version record](../lab/s02/versions.json). The initial live preflight returned `sudo: interactive authentication is required`; no real lab success is inferred from offline checks.
+Containerlab 0.83.0 was downloaded and its archive/binary hashes verified. FRR 10.7.1's exact manifest digest and both Containerlab hashes are retained in the [version record](../lab/s02/versions.json). The initial live preflight returned `sudo: interactive authentication is required`; actual local two-cycle success is now recorded from `artifacts/lab-s02-local/summary.json`.
 
 Root build/test logs are stored locally under `artifacts/s02-checks`; timed fuzz output is under `artifacts/fuzz-s02-acceptance`; the requested real lab run writes `artifacts/lab-s02-local/summary.json`. Generated artifacts are ignored by Git, while independent seed fixtures, both Cargo lockfiles, and version pins remain version-controlled inputs.
 
 Remote CI and the other developer's review have not been executed or approved by this implementation. S01's outstanding acceptance evidence is not silently closed. No Rust-to-FRR session, route scenario, performance target, or M1 completion is claimed.
+
+
+## AN03–AN07 passive track
+
+Two developers, five two-week sprints: 70 implementation/test person-days and 30 review/integration
+person-days. A/B are ownership roles, not claims that a second developer reviewed this change.
+The original S03–S10 tickets below retain their identities as deferred active backlog; their
+relative-week forecast is historical. Reforecast active work after the passive release; reusable
+UPDATE/state work does not establish active interoperability or recovery gates.
+
+| Sprint | A: 3 + 2 + 2 days | B: 3 + 2 + 2 days | Acceptance |
+| --- | --- | --- | --- |
+| AN03 | Analysis types; shared durable storage; serialization/evidence tests | RIPEstat; CLI compatibility; provider tests/docs | Lab-independent lookup and provenance |
+| AN04 | IPv4 UPDATE; IPv6 MP; ASN/AS4_PATH/ADD-PATH | MRT streaming; normalization/CLI; independent fixtures/fuzz | Bounded both-family file observations |
+| AN05 | Source-local state; epochs/gaps; replay/snapshots | RIS Live; bounded durable queue; disconnect/cancellation tests | Filtered recording with explicit gaps |
+| AN06 | TCP reassembly; OPEN/context; overlap/loss tests | PCAP/PCAPNG; inspection/evidence; cross-source fixtures | BGP inspection without capability guessing |
+| AN07 | Findings; uncertainty/deduplication; replay parity | Integrity/report; end-to-end measurements; release docs | Evidence-linked deterministic reports |
+
+Each row's A1/A2/A3 and B1/B2/B3 map left-to-right to its three deliverables. Implementation is
+available for all rows; acceptance remains `review` until the independent reviewer signs off.
+[Passive analysis](passive-analysis.md) defines the delivered interface and explicit limits.
+The [acceptance record](evidence/passive-analysis.json) separates local checks, timed fuzzing,
+public-provider smoke tests, remote CI, and independent review. No unexecuted gate is closed.
+
+### Passive implementation acceptance record
+
+Recorded 2026-11-10. All thirty AN03–AN07 work packages have implemented outputs and remain
+in `review` pending independent review. Local Rust 1.93.1 format, Clippy, debug/release build,
+and **65 Rust tests** passed; seven Python infrastructure tests passed. The capture acceptance
+case additionally covers IPv6 transport, VLAN, raw IP, SLL/SLL2, and multi-interface PCAPNG.
+
+Each new fuzz target (`updates`, `mrt`, `tcp`) completed 601 seconds with seed 1, no crash,
+timeout, RSS-limit failure, or reproducer. Actual RIPEstat IP (IPv4/IPv6), prefix and ASN
+queries passed. 20-second RIS Live recordings acknowledged both family subscriptions;
+no route changes arrived in those short windows. Change-rule behavior is established by
+independent fixtures and mocked feeds, not inferred from those live acknowledgements.
+
+A release-build SIGINT exercise exited 130 and retained `complete: false`. The synthetic
+1000-entry MRT measurement and queue/fsync measurements are stored with the evidence;
+they are observations on this machine, not performance guarantees. Remote CI and a second
+developer's review remain unexecuted. Full details: [acceptance JSON](evidence/passive-analysis.json).
 
 ## Sprint 3: sessions and IPv4 UPDATE
 

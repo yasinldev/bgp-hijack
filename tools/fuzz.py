@@ -12,7 +12,7 @@ import time
 ROOT = Path(__file__).resolve().parents[1]
 NIGHTLY = "nightly-2026-11-09"
 CARGO_FUZZ = "0.13.2"
-TARGETS = {"framing": 8192, "control_messages": 4096}
+TARGETS = {"framing": 8192, "control_messages": 4096, "updates": 4096, "mrt": 8192, "tcp": 8192}
 
 
 def completion(log, seconds):
@@ -60,7 +60,12 @@ def run(args):
         corpus.mkdir(parents=True)
         artifacts.mkdir()
         seed_hashes = {}
-        for case in cases:
+        target_cases = cases
+        if name in ("updates", "mrt", "tcp"):
+            passive_catalog = ROOT / "crates/analysis/tests/fixtures/fuzz-seeds.json"
+            target_cases = [case for case in json.loads(passive_catalog.read_text()) if case["target"] == name]
+            result["passive_fixture_catalog_sha256"] = hashlib.sha256(passive_catalog.read_bytes()).hexdigest()
+        for case in target_cases:
             data = bytes.fromhex(case["hex"])
             (corpus / case["name"]).write_bytes(data)
             seed_hashes[case["name"]] = hashlib.sha256(data).hexdigest()

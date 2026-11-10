@@ -154,9 +154,7 @@ impl<C: JournalClock> JournalWriter<C> {
         let encoded = bounded_json(&manifest, limits.max_manifest_bytes, "manifest")?;
         fs::create_dir(path)?;
         let mut file = File::create_new(path.join("manifest.json"))?;
-        file.write_all(&encoded)?;
-        file.flush()?;
-        file.sync_all()?;
+        crate::storage::persist(&mut file, &encoded)?;
         let sink = File::create_new(path.join("events.jsonl"))?;
         sink.sync_all()?;
         File::open(path)?.sync_all()?;
@@ -216,11 +214,7 @@ impl<C: JournalClock, S: DurableWrite> JournalWriter<C, S> {
         if total > self.limits.max_journal_bytes {
             return Err(JournalError::Limit("journal"));
         }
-        let result = self
-            .sink
-            .write_all(&bytes)
-            .and_then(|()| self.sink.flush())
-            .and_then(|()| self.sink.sync_all());
+        let result = crate::storage::persist(&mut self.sink, &bytes);
         if let Err(error) = result {
             self.failed = true;
             return Err(error.into());

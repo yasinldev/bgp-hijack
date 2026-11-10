@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "sessions": [
+    {
+      "flow": {
+        "section": 0,
+        "interface": 0,
+        "source": "192.0.2.1",
+        "source_port": 50000,
+        "destination": "192.0.2.2",
+        "destination_port": 179
+      },
+      "asn_width": 4,
+      "add_path": [],
+      "first_bgp_sequence": 5000
+    }
+  ]
+}
