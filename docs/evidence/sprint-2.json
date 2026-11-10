@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "recorded_date": "2026-11-10",
+  "main_toolchain": "1.93.1",
+  "rust_tests_passed": 42,
+  "python_tests_passed": 7,
+  "remote_ci": "not_run",
+  "independent_developer_review": "pending",
+  "local_checks": [
+    {
+      "command": "cargo fmt --all -- --check",
+      "result": "passed",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "cargo clippy --workspace --all-targets --locked -- -D warnings",
+      "result": "passed",
+      "log_sha256": "5f8e134920574c973c4b4961def7c76118346cc7e484a74df313e933f349d0be"
+    },
+    {
+      "command": "cargo test --workspace --locked",
+      "result": "passed",
+      "log_sha256": "cff457e29400028015df43a5e49d004cc4b618a3fc889059f6dd8b2ce87a5e88"
+    },
+    {
+      "command": "cargo build --workspace --locked",
+      "result": "passed",
+      "log_sha256": "736e2582f563605dd272e5fb977840b0c0767377d27b6940c440caf75eec7157"
+    },
+    {
+      "command": "cargo build --workspace --release --locked",
+      "result": "passed",
+      "log_sha256": "dc86ab3a70023a454da355d3cefb86cab9113e2e69f3a527e8485ed755f747db"
+    }
+  ],
+  "fixture_catalog_sha256": "edfe08b9b005e850de54bcca0f7b74a8267fb42a44eb2b2e24aba20f89574ecb",
+  "fuzz": {
+    "nightly": "nightly-2026-11-09",
+    "rustc": "rustc 1.102.0-nightly (5b7b37aef 2026-11-08)\nbinary: rustc\ncommit-hash: 5b7b37aefcb5b2fba3c2392bc9065b9e4602d494\ncommit-date: 2026-11-08\nhost: x86_64-unknown-linux-gnu\nrelease: 1.102.0-nightly\nLLVM version: 23.1.5",
+    "cargo_fuzz": "0.13.2",
+    "libfuzzer_sys": "0.4.13",
+    "seed": 1,
+    "seconds_per_target": 600,
+    "per_input_timeout_seconds": 2,
+    "rss_limit_mib": 1024,
+    "targets": [
+      {
+        "name": "framing",
+        "executions": 30688311,
+        "fuzzer_seconds": 601,
+        "exit_code": 0,
+        "failure_artifacts": [],
+        "max_input_bytes": 8192,
+        "log_sha256": "22eb4c58030aa97e30fc0bac5ccad476b493908b9095bb12df7d67af69698ac9",
+        "seed_sha256": {
+          "keepalive": "bdd86dabb355d0ba54dfad1043129ac6a1115749648beafce2b60163d828d46a",
+          "open-dual-as4": "e72ba3b6b8cc3cc9f2e93f5b754e527ea67bac9e285314f01423db72e857d1da",
+          "open-extended": "ffe74334e9d61f7d77e82de429ca0b4cfaabbff2eb18ecb61fb9d4074c7358da",
+          "open-legacy": "9a722619bcd574bea718752a42be8973d13c2ff39b7c4941a88c8397173f2e17",
+          "notification": "fc75ce28a637a15c0a96a99d0c6d3a96ae84b88f291ed1a0550aaf2d4bc7ef07",
+          "empty-update": "8de1fbfcfde86ed39ea2f9550a3b8777d929ca006aad985bfc58cf912624c049",
+          "bad-marker": "ebbd5d1b89b771e75083d2509f91e975944e60b7899ee6474126c5604fca496a",
+          "bad-length": "6e8038d06396ead589d405d1f8ad65616b4f2e61fb31e7acd87f65e2603ae1e9",
+          "bad-type": "2cd282ce74f92e2013df29da3f9c03bcc074b57bd2ab00a6b83280479972cb2b",
+          "truncated-open": "d264dc9561176bdf6277d8b9e781781ccf818ec2a872877fd05133574900dede",
+          "wrong-version": "e4d36c514f716ca4b7b5097904707b6f104ae41a53994116310e544ef160ded1"
+        }
+      },
+      {
+        "name": "control_messages",
+        "executions": 149835462,
+        "fuzzer_seconds": 601,
+        "exit_code": 0,
+        "failure_artifacts": [],
+        "max_input_bytes": 4096,
+        "log_sha256": "a05b123e059a13c0416850b712bbcade8a30ed1f07934fd929cc55d495b332f1",
+        "seed_sha256": {
+          "keepalive": "bdd86dabb355d0ba54dfad1043129ac6a1115749648beafce2b60163d828d46a",
+          "open-dual-as4": "e72ba3b6b8cc3cc9f2e93f5b754e527ea67bac9e285314f01423db72e857d1da",
+          "open-extended": "ffe74334e9d61f7d77e82de429ca0b4cfaabbff2eb18ecb61fb9d4074c7358da",
+          "open-legacy": "9a722619bcd574bea718752a42be8973d13c2ff39b7c4941a88c8397173f2e17",
+          "notification": "fc75ce28a637a15c0a96a99d0c6d3a96ae84b88f291ed1a0550aaf2d4bc7ef07",
+          "empty-update": "8de1fbfcfde86ed39ea2f9550a3b8777d929ca006aad985bfc58cf912624c049",
+          "bad-marker": "ebbd5d1b89b771e75083d2509f91e975944e60b7899ee6474126c5604fca496a",
+          "bad-length": "6e8038d06396ead589d405d1f8ad65616b4f2e61fb31e7acd87f65e2603ae1e9",
+          "bad-type": "2cd282ce74f92e2013df29da3f9c03bcc074b57bd2ab00a6b83280479972cb2b",
+          "truncated-open": "d264dc9561176bdf6277d8b9e781781ccf818ec2a872877fd05133574900dede",
+          "wrong-version": "e4d36c514f716ca4b7b5097904707b6f104ae41a53994116310e544ef160ded1"
+        }
+      }
+    ]
+  },
+  "live_lab": {
+    "status": "pending",
+    "two_cycles_completed": false,
+    "reason": "Initial preflight requires interactive sudo authentication; no live lab result has been provided."
+  },
+  "lockfiles": {
+    "Cargo.lock": "44ec754abd02b34902522020a018e2f7149f025a65acb1c21e52da7f2c1006d0",
+    "fuzz/Cargo.lock": "708e995f2013d377fa48424f7c790d783587b029a1772503a2f05093aaeb0d49"
+  },
+  "lab_versions": {
+    "schema_version": 1,
+    "fixture_id": "bgp-codec-s02-v1",
+    "containerlab_version": "0.83.0",
+    "containerlab_archive_url": "https://github.com/srl-labs/containerlab/releases/download/v0.83.0/containerlab_0.83.0_linux_amd64.tar.gz",
+    "containerlab_archive_sha256": "1ee43b8fd5979d8baa205e267480d69177f7461b2d1bf512df144800c08cfe2c",
+    "containerlab_binary_sha256": "780bf9fb99197a2f37f636777232e2a72ad386b0430dac1c26d253cbd844fd49",
+    "checksums_url": "https://github.com/srl-labs/containerlab/releases/download/v0.83.0/checksums.txt",
+    "frr_version": "10.7.1",
+    "frr_image": "quay.io/frrouting/frr:10.7.1@sha256:e995beaa50fdc9edb35eadcfefa29b7f062cc06f2b812613789b68fa541554d2"
+  }
+}

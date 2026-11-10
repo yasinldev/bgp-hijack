@@ -1,0 +1,13 @@
+[
+  {"name":"keepalive","source":"RFC 4271 section 4.4: 19-byte header only","hex":"ffffffffffffffffffffffffffffffff001304","outcome":"keepalive"},
+  {"name":"open-dual-as4","source":"RFC 4271 4.2, RFC 6793 3, RFC 4760 8; manually specified ASN 4200000001, ID 203.0.113.1, hold 90","hex":"ffffffffffffffffffffffffffffffff003101045ba0005acb0071011402124104fa56ea01010400010001010400020001","outcome":"open"},
+  {"name":"open-extended","source":"RFC 9072 section 2; forced extended encoding of the preceding 18 capability octets","hex":"ffffffffffffffffffffffffffffffff003501045ba0005acb007101ffff00150200124104fa56ea01010400010001010400020001","outcome":"open"},
+  {"name":"open-legacy","source":"RFC 4271 section 4.2; ASN 65000, hold zero, ID 192.0.2.1; syntactically valid but incompatible with the lab","hex":"ffffffffffffffffffffffffffffffff001d0104fde80000c000020100","outcome":"open"},
+  {"name":"notification","source":"RFC 4271 section 4.5; code 6, subcode 2, opaque data deadbeef","hex":"ffffffffffffffffffffffffffffffff0019030602deadbeef","outcome":"notification"},
+  {"name":"empty-update","source":"RFC 4271 section 4.3; zero withdrawn-routes and path-attribute lengths, preserved as raw UPDATE","hex":"ffffffffffffffffffffffffffffffff00170200000000","outcome":"update"},
+  {"name":"bad-marker","source":"Mutation of KEEPALIVE marker octet zero, independently of encoder","hex":"00ffffffffffffffffffffffffffffff001304","outcome":"invalid_marker"},
+  {"name":"bad-length","source":"RFC 4271 section 6.1; length below common header","hex":"ffffffffffffffffffffffffffffffff001204","outcome":"invalid_length"},
+  {"name":"bad-type","source":"RFC 4271 section 6.1; unrecognized type 255","hex":"ffffffffffffffffffffffffffffffff0013ff","outcome":"invalid_type"},
+  {"name":"truncated-open","source":"OPEN header promises 29 octets but only its version follows","hex":"ffffffffffffffffffffffffffffffff001d0104","outcome":"truncated"},
+  {"name":"wrong-version","source":"OPEN version 3 in an otherwise complete minimum OPEN","hex":"ffffffffffffffffffffffffffffffff001d0103fde80000c000020100","outcome":"invalid_open"}
+]

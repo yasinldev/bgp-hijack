@@ -1,6 +1,10 @@
 /target/
 /artifacts/
 /clab-*/
+/fuzz/target/
+/fuzz/artifacts/
+/.cache/
+__pycache__/
 *.pcap
 *.pcapng
 !**/fixtures/**/*.pcap

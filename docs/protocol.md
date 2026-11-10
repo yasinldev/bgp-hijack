@@ -1,6 +1,6 @@
 # BGP protocol contract
 
-**Status: planned.** This is the required subset for the first release, not a claim of a complete BGP implementation.
+**Status: partially implemented (Sprint 2).** Bounded framing, OPEN/capabilities, KEEPALIVE, NOTIFICATION and pure OPEN compatibility checks are implemented. UPDATE bodies, FSM/TCP sessions and route state remain planned. This document defines the first-release contract; see the [development guide](development.md#codec-api) for current API behavior and the sprint record for actual validation evidence.
 
 ## Supported subset
 
@@ -29,6 +29,8 @@ Without Extended Messages, the accepted message-size ceiling will be 4096 octets
 Decoded values will preserve attribute flags and AS-path segment types. Prefixes will be canonicalized before use as keys. The first-release fixture will use AS_SEQUENCE paths. AS_SET and AS_CONFED_SET will not be originated; received routes containing them will use treat-as-withdraw handling under [RFC 9774](https://www.rfc-editor.org/rfc/rfc9774.html). Unsupported path forms will never be flattened into a plausible-looking sequence.
 
 ## OPEN and capability handling
+
+The implemented decoder supports both normal optional-parameter lengths and [RFC 9072](https://www.rfc-editor.org/rfc/rfc9072.html) extended optional-parameter lengths within the same 4096-byte message ceiling. This is separate from the deferred Extended Messages capability. BGP identifier validation uses the nonzero four-octet identifier definition in [RFC 6286](https://www.rfc-editor.org/rfc/rfc6286.html); static configuration retains its narrower lab-address restrictions.
 
 The engine will validate the BGP version, peer identity, BGP identifier, hold time, and optional-parameter bounds. BGP identifiers remain four-octet identifiers even in an IPv6 experiment. Capabilities will be processed independently rather than assuming a fixed order. Unknown capabilities will follow the handling specified by [RFC 5492](https://www.rfc-editor.org/rfc/rfc5492.html).
 

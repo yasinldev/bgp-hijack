@@ -1,6 +1,6 @@
 # Product definition
 
-**Status: first-release target remains planned.** Sprint 1 supplies offline configuration validation and model/evaluator foundations. The full runtime capabilities below are requirements for subsequent implementation; see the [root README](../README.md) for currently executable commands.
+**Status: first-release target remains planned.** The current foundation includes static validation, model/evaluator contracts, control-message codecs, durable journals, and developer lab/fuzz tools. Full runtime capabilities below remain requirements for subsequent implementation; see the [root README](../README.md) for executable commands and acceptance status.
 
 ## Purpose and users
 

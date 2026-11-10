@@ -1,6 +1,6 @@
 # Sprint plan
 
-**Status: Sprint 1 implementation available for review.** S01-A1, A2, A3, B1, B2, and B3 are implemented and locally verified; the [implementation record](#sprint-1-implementation-record) distinguishes that evidence from pending remote CI and second-developer review. Sprints 2-10 and protocol/lab acceptance gates remain planned.
+**Status: Sprint 2 implementation available; acceptance tracked below.** The [Sprint 1 record](#sprint-1-implementation-record) and [Sprint 2 record](#sprint-2-implementation-record) distinguish implemented work from executed checks and outstanding review/live evidence. Sprints 3-10 and M1-M4 acceptance gates remain planned.
 
 ## Planning basis
 
@@ -106,6 +106,29 @@ Remote CI execution and independent review are the remaining acceptance evidence
 | S02-B3 | B | 2 | Create independently specified byte fixtures and a bounded decoder fuzz harness. Record input provenance and persist reproducible failures; do not use the encoder as the sole test oracle. | S02-A1, S02-A2, S02-A3 |
 
 **Demo and exit evidence:** Parse known control messages from fixture input, reject malformed input without panic, and provision/tear down the peer harness without external routing connectivity. Preserve the test corpus and a fuzz-run summary, including duration and seed/corpus identity.
+
+### Sprint 2 implementation record
+
+Recorded **2026-11-10**. The implementation follows the accepted local-host and per-record durable-write choices. The [development guide](development.md) describes public Rust APIs and exact developer commands. The user CLI continues to provide static validation only.
+
+| Ticket | State | Implementation and evidence |
+| --- | --- | --- |
+| S02-A1 | `review` | Fixed-size incremental framing, terminal error state, EOF distinction and raw UPDATE frames. Independent fixtures exercise every split, coalescing, malformed headers and size boundaries. |
+| S02-A2 | `review` | OPEN, four-octet ASN and MP capabilities, extended optional lengths, and separate compatibility checks. Tests cover unknown/duplicate/conflicting capabilities, required families and wire-level error hints. |
+| S02-A3 | `review` | KEEPALIVE and NOTIFICATION encoding/decoding, preserving opaque notification data and supplying typed errors. |
+| S02-B1 | `in_progress` | Pinned two-node fixture, checksum-verified Containerlab installation, lifecycle/acceptance tools and five offline isolation tests implemented. Real two-cycle acceptance awaits local sudo authentication; initial agent preflight recorded that requirement. |
+| S02-B2 | `review` | Initialized manifests, per-record write/flush/sync, injected I/O faults, controlled clock, bounded reader and truncated-prefix recovery implemented. Seven integration tests and two storage fault tests pass. |
+| S02-B3 | `review` | Eleven independently described byte fixtures, two pinned fuzz targets, runner and manual CI implemented. Both targets completed their 600-second budgets with exit code 0 and no failure artifacts. |
+
+Local Rust 1.93.1 checks passed: `cargo fmt --all -- --check`, Clippy with `-D warnings`, `cargo test --workspace --locked` (**42 tests**), debug build and release build. Seven Python tests also passed: five offline lab tests and two fuzz-completion checks. The topology instance was checked against Containerlab 0.83.0's official schema; this is not a live deployment result.
+
+Both fuzz targets reported normal completion after 601 seconds, using seed 1, nightly-2026-11-09, cargo-fuzz 0.13.2 and libfuzzer-sys 0.4.13. No crash, timeout, or RSS-limit failure was recorded. The [versioned evidence summary](evidence/sprint-2.json) records run counts, input limits, seed/log/lockfile hashes, tool versions and the outstanding live-lab condition. These are bounded fuzz observations, not a proof of complete correctness or a performance guarantee.
+
+Containerlab 0.83.0 was downloaded and its archive/binary hashes verified. FRR 10.7.1's exact manifest digest and both Containerlab hashes are retained in the [version record](../lab/s02/versions.json). The initial live preflight returned `sudo: interactive authentication is required`; no real lab success is inferred from offline checks.
+
+Root build/test logs are stored locally under `artifacts/s02-checks`; timed fuzz output is under `artifacts/fuzz-s02-acceptance`; the requested real lab run writes `artifacts/lab-s02-local/summary.json`. Generated artifacts are ignored by Git, while independent seed fixtures, both Cargo lockfiles, and version pins remain version-controlled inputs.
+
+Remote CI and the other developer's review have not been executed or approved by this implementation. S01's outstanding acceptance evidence is not silently closed. No Rust-to-FRR session, route scenario, performance target, or M1 completion is claimed.
 
 ## Sprint 3: sessions and IPv4 UPDATE
 

@@ -1,6 +1,6 @@
 # Reference lab and scenarios
 
-**Status: planned.** The topology and scenarios below are design fixtures. Deployable Containerlab files and runtime commands have not been implemented.
+**Status: full scenario topology planned.** The five-role topology and scenarios below remain design fixtures. Sprint 2 adds a separate two-node peer fixture and explicit developer lifecycle tools; see the [development guide](development.md#minimal-frr-fixture). That fixture does not implement these traffic scenarios, and its live verification status is recorded separately in the sprint plan.
 
 ## Reference environment
 

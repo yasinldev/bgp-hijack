@@ -2,7 +2,7 @@
 
 A Rust research project for reproducible BGP experiments in isolated laboratories.
 
-**Current implementation: Sprint 1 foundation.** The executable validates configuration files offline. The core library provides shared models, versioned evidence types, and pure result evaluation. BGP sessions, packet capture, scenario execution, and artifact-based reporting remain planned.
+**Current implementation: Sprint 2 increment.** The executable validates configuration files offline. The core library includes bounded BGP framing/control messages, durable JSONL recording, shared evidence types, and pure result evaluation. A minimal FRR developer fixture and bounded fuzz tools are available. BGP sessions, UPDATE processing, packet capture, scenarios, and artifact-based reports remain planned. See the [sprint record](docs/sprint-plan.md#sprint-2-implementation-record) for verification status.
 
 ## Build
 
@@ -13,7 +13,7 @@ rustup toolchain install 1.93.1 --profile minimal --component rustfmt --componen
 cargo build --workspace --locked
 ```
 
-The current commands and tests need no Docker installation, running lab, or network-administration privileges. Cargo needs access to dependencies on its first build; configuration validation itself performs no network access.
+The public CLI and normal Rust tests need no Docker installation, running lab, or network-administration privileges. The separate developer lab tool requires local Docker and sudo access. Cargo needs access to dependencies on its first build; configuration validation itself performs no network access.
 
 ## Validate a configuration
 
@@ -56,11 +56,14 @@ cargo clippy --workspace --all-targets --locked -- -D warnings
 cargo test --workspace --locked
 cargo build --workspace --locked
 cargo build --workspace --release --locked
+python3 -m unittest discover -s tools/tests -v
 ```
 
 The GitHub Actions workflow runs these commands on Linux with the pinned toolchain. Local execution of these checks does not establish that a remote CI run has occurred.
 
-The core library is in `crates/core`; argument handling and command output are in `crates/cli`. Configuration, verdict, serialization, and CLI tests include failure cases and independent JSON fixtures. The pure evaluator assumes observations supplied by its caller; artifact integrity verification and journal writing are future work.
+The core library is in `crates/core`; argument handling and command output are in `crates/cli`. Configuration, codec, journal, verdict, serialization, and CLI tests cover failures and independent fixtures. The evaluator assumes caller-supplied observations; artifact integrity verification remains future work.
+
+See the [development guide](docs/development.md) for codec/journal APIs, the two-node FRR fixture, its real acceptance command, and reproducible fuzzing. These developer tools do not turn `run` or `report` into implemented user commands.
 
 ## Project documents
 

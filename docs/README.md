@@ -1,6 +1,6 @@
 # BGP Hijack Lab documentation
 
-**Status: Sprint 1 foundation implemented.** The repository provides offline `validate --static`, shared configuration/evidence models, and pure result evaluation. Live lab operations, the BGP engine, packet recording, and runtime performance claims remain planned. See the [root README](../README.md) for executable examples and the [sprint record](sprint-plan.md#sprint-1-implementation-record) for verification/review status.
+**Status: Sprint 2 increment implemented; acceptance evidence tracked separately.** The repository provides static validation, BGP framing/control-message codecs, durable event journals, and pure result evaluation. Developer lab/fuzz tools are available; live Rust sessions, UPDATE processing and scenarios remain planned. See the [root README](../README.md) and [sprint record](sprint-plan.md#sprint-2-implementation-record) for usage and verification status.
 
 BGP Hijack Lab, working name `bgp-hijack`, is a routing research tool for isolated laboratories. It will correlate controlled BGP changes with measured packet delivery and prefix-filter behavior. Its first release will cover forwarding through an experiment node and controlled blackholing, for both IPv4 and IPv6.
 
@@ -15,6 +15,7 @@ BGP Hijack Lab, working name `bgp-hijack`, is a routing research tool for isolat
 | [Interfaces](interfaces.md) | What will the CLI accept and produce? |
 | [Roadmap and validation](roadmap-and-validation.md) | In what order will we build, and how will we verify each milestone? |
 | [Sprint plan](sprint-plan.md) | How will two developers deliver the first release across two-week sprints, with owners, dependencies, estimates, and demos? |
+| [Development guide](development.md) | How do the implemented codec/journal APIs and developer lab/fuzz tools work? |
 
 ## Accepted decisions
 
@@ -36,6 +37,8 @@ These decisions are the baseline for implementation, rather than a list of alter
 | D12 | Rust 1.93.1, edition 2024, resolver 3; exact direct dependency versions and a committed lockfile. | Make the foundation reproducible across local development and CI. |
 | D13 | Bounded serde-saphyr YAML parsing followed by strict typed deserialization with field paths. | Reject duplicate keys and implicit scalar coercion while preserving useful errors. |
 | D14 | `validate --static` is file-only and reports `runtime_verified: false`. | Distinguish implemented configuration checks from future live prerequisites. |
+| D15 | Every journal append flushes and synchronizes before returning success. | Give callers an explicit durability boundary before future lab mutations. |
+| D16 | Sprint 2 uses a local, two-node management-free fixture; fuzzing uses an isolated pinned nightly workspace. | Verify peer prerequisites independently while preserving the stable main toolchain and later scenario scope. |
 
 The more detailed contracts belong to the linked documents: product owns scope, protocol owns wire behavior, lab and scenarios owns expected outcomes, and interfaces owns configuration and artifact names. The sprint plan owns implementation sequencing and capacity estimates; it does not override those contracts. Update this decision table when an accepted choice changes, together with its affected documents.
 
@@ -45,11 +48,12 @@ The more detailed contracts belong to the linked documents: product owns scope, 
 | --- | --- |
 | Design documents | Present; requirements for future work |
 | Rust workspace and CLI | Static validation and command scaffolding implemented; live operations planned |
-| Configuration/evidence models and evaluator | Implemented; journal writing and artifact verification planned |
-| Containerlab topology and FRR fixtures | Planned |
+| Configuration/evidence models and evaluator | Implemented, including bounded durable journals; artifact integrity verification planned |
+| BGP codec | Framing, OPEN, KEEPALIVE and NOTIFICATION implemented; UPDATE body processing planned |
+| Containerlab topology and FRR fixtures | Minimal developer fixture implemented; live acceptance recorded separately; full scenario topology planned |
 | Scenario runner and packet recording | Planned |
 | Foundation tests | Configuration, JSON, verdict, and CLI tests implemented |
-| Protocol and lab integration tests | Planned |
+| Protocol and lab tests | Control-message fixtures, fuzz targets and offline isolation checks implemented; live session tests planned |
 | Performance measurements | Planned; no capacity or latency claims |
 
 The existing repository [license](../LICENSE) is Apache-2.0. This documentation describes the product's intended behavior; it does not add license terms.

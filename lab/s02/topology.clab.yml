@@ -1,0 +1,19 @@
+{
+  "name": "bgp-codec-s02",
+  "mgmt": {"skip-when-unused": true},
+  "topology": {
+    "defaults": {
+      "kind": "linux",
+      "image": "quay.io/frrouting/frr:10.7.1@sha256:e995beaa50fdc9edb35eadcfefa29b7f062cc06f2b812613789b68fa541554d2",
+      "network-mode": "none",
+      "restart-policy": "no",
+      "labels": {"bgp-hijack.fixture": "bgp-codec-s02-v1"},
+      "sysctls": {"net.ipv4.ip_forward": "0", "net.ipv6.conf.all.forwarding": "0"}
+    },
+    "nodes": {
+      "dut": {"binds": ["dut.conf:/etc/frr/frr.conf:ro", "dut.daemons:/etc/frr/daemons:ro"]},
+      "peer": {"binds": ["peer.conf:/etc/frr/frr.conf:ro", "peer.daemons:/etc/frr/daemons:ro"]}
+    },
+    "links": [{"endpoints": ["dut:eth1", "peer:eth1"]}]
+  }
+}

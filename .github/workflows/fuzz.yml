@@ -1,0 +1,26 @@
+name: Bounded codec fuzzing
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fuzz:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install pinned fuzz tools
+        run: |
+          rustup toolchain install nightly-2026-11-09 --profile minimal --component rust-src
+          cargo +nightly-2026-11-09 install cargo-fuzz --version 0.13.2 --locked
+      - name: Run bounded targets
+        run: python3 tools/fuzz.py --output artifacts/fuzz --seconds 600 --seed 1
+      - name: Preserve logs, corpus, and reproducers
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: codec-fuzz-evidence
+          path: artifacts/fuzz
+          if-no-files-found: warn

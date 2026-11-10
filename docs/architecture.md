@@ -1,10 +1,10 @@
 # Architecture
 
-**Status: partially implemented (Sprint 1).** Shared models, static configuration validation, pure result evaluation, and CLI scaffolding are implemented. The protocol engine, live lab adapter, route store, journal, and packet observation components described below remain planned.
+**Status: partially implemented (Sprint 2).** Shared models, static validation, pure evaluation, CLI scaffolding, control-message codecs and durable journals are implemented. A minimal developer lab tool is available. The session engine, scenario lab adapter, route store and packet observation components remain planned; the [development guide](development.md) describes current boundaries.
 
 ## Component boundaries
 
-The custom engine will use Rust. Tokio will provide asynchronous I/O and timers, Clap will define the CLI, and Serde will handle configuration and artifact serialization. Dependency and toolchain versions will be pinned when the Rust workspace is introduced and recorded in run metadata.
+The custom engine uses Rust. Tokio will provide asynchronous I/O and timers, Clap defines the CLI, and Serde handles configuration and artifact serialization. The workspace pins dependency/toolchain versions; runtime metadata will identify the versions used for each experiment.
 
 ```mermaid
 flowchart LR

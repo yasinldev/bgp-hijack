@@ -1,6 +1,6 @@
 # CLI, configuration, and artifacts
 
-**Status: partially implemented (Sprint 1).** The `bgp-hijack` binary implements `validate --static`. Configuration and evidence/result types are available in the core library. Live validation, `run`, artifact-based `report`, and the referenced lab fixture remain planned.
+**Status: partially implemented (Sprint 2).** The public binary implements `validate --static`. Core configuration/evidence types and durable journal writing/reading are available. Live validation, `run`, artifact-based `report`, and the referenced five-role fixture remain planned. Separate developer lab/fuzz tools are described in the [development guide](development.md).
 
 ## Commands
 
@@ -114,7 +114,7 @@ Each family must have its corresponding prefix and endpoint measurements. Peer a
 
 ## Artifact layout
 
-Sprint 1 implements the serializable `EventEnvelope`, `Manifest`, `AssertionResult`, and `RunSummary` types in `bgp-hijack-core`. It does not write journals, generate runtime events, or read/verify run artifacts. Deserializing these types alone does not validate a run's schema compatibility, artifact paths, integrity, or completeness; those checks belong to the future artifact reader.
+The core implements serializable `EventEnvelope`, `Manifest`, `AssertionResult`, and `RunSummary` types. Sprint 2 adds a durable journal API that initializes manifests, assigns event metadata, and reads complete journal prefixes with schema/run/order checks. The CLI does not generate runtime events. Deserializing evidence types alone still does not validate artifact paths, hashes, or run completeness; full artifact verification remains future work.
 
 The run directory will contain:
 
@@ -136,7 +136,9 @@ snapshots/
 | `captures/` | PCAPNG recordings with interface identity and capture/drop statistics for the selected flows. |
 | `snapshots/` | Timestamped route, policy, endpoint, and relevant lab-state observations. |
 
-The manifest will be initialized before mutation and finalized after recovery/reporting. Evidence references will be relative to the run directory, and readers will reject references escaping that directory. Finalized artifacts will have recorded sizes and hashes. An interrupted run may lack a final report or finalized hashes; its incomplete state must remain distinguishable from verified artifacts.
+The journal initializes and synchronizes the manifest before returning a writer. Every append is flushed and synchronized before success. Manifest finalization after recovery/reporting remains planned; Sprint 2 leaves completeness false and artifact sizes/hashes unknown. Future artifact readers will require references relative to the run directory and reject escaping paths. An interrupted run may lack a final report or finalized hashes; its incomplete state remains distinguishable from verified artifacts.
+
+`JournalLimits` defaults to 1 MiB per record including newline, 64 MiB per journal and 4 MiB per manifest. These Rust API settings do not add fields to YAML schema 1. The reader retains complete events before a truncated tail, but stops with an error on malformed complete records, schema/run mismatch, sequence gaps or regressing elapsed time. Clean EOF does not mark a run complete. See [journal durability](development.md#journal-api-and-durability) for creation and I/O-error behavior.
 
 The implemented manifest fields are `schema_version`, `run_id`, `started_at`, `configuration`, `fixture_id`, `fixture_version`, `software_versions`, `image_identities`, `artifacts`, and `complete`. Each artifact entry contains `path`, nullable `size_bytes` and `sha256`, and `complete`; unknown integrity data remains `null`. Version and image identities are string maps. `started_at` uses the same UTC timestamp representation as events.
 
@@ -190,7 +192,7 @@ Origin ASNs will be recorded as observations, not as an `attacker_asn` attributi
 
 Reports will include `schema_version`, `run_id`, `scenario`, `policy_profile`, `result`, per-family `assertions`, `cleanup_status`, and `evidence_gaps`. Each assertion will identify its expectation, observation, verdict, and evidence references. Cleanup status will be `completed`, `failed`, or `unverified`.
 
-The implemented `AssertionResult` fields are `id`, `address_family`, `expectation`, `observation`, `result`, and `evidence_refs`. The pure evaluator takes expected `(id, address_family)` keys, observations, enabled families, completion/interruption flags, cleanup status, and evidence gaps. Empty or duplicate requirements, missing family coverage, duplicate/unexpected observations, blank observations, or missing evidence references cannot produce `passed`. A supported failure with evidence takes precedence over incomplete data. Evidence references are assessed for presence only in Sprint 1; the caller supplies trusted observations and cleanup status.
+The implemented `AssertionResult` fields are `id`, `address_family`, `expectation`, `observation`, `result`, and `evidence_refs`. The pure evaluator takes expected `(id, address_family)` keys, observations, enabled families, completion/interruption flags, cleanup status, and evidence gaps. Empty or duplicate requirements, missing family coverage, duplicate/unexpected observations, blank observations, or missing evidence references cannot produce `passed`. A supported failure with evidence takes precedence over incomplete data. Evidence references are currently assessed for presence only; the caller supplies trusted observations and cleanup status.
 
 Aggregation order is fixed:
 

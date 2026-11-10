@@ -1,0 +1,11 @@
+---
+dut:
+    username: 
+    password: 
+    platform: linux
+    hostname: 
+peer:
+    username: 
+    password: 
+    platform: linux
+    hostname: 

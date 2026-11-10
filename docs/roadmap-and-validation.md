@@ -1,6 +1,6 @@
 # Roadmap and validation
 
-**Status: implementation started; protocol and lab gates remain planned.** Sprint 1 provides the Rust workspace, offline static validation, shared evidence models, and pure verdict evaluation. Local verification and outstanding review/remote CI are recorded in the [Sprint 1 implementation record](sprint-plan.md#sprint-1-implementation-record). No protocol or live lab acceptance gate has passed.
+**Status: implementation started; M1-M4 gates remain open.** Sprint 2 adds framing/control-message codecs, durable journals, a minimal FRR fixture, and fuzz tools to the Sprint 1 foundation. Local verification and outstanding acceptance/review evidence are recorded in the [Sprint 2 implementation record](sprint-plan.md#sprint-2-implementation-record). This does not establish session interoperability or scenario acceptance.
 
 The [sprint plan](sprint-plan.md) turns these gates into a 10-sprint baseline for two developers working in two-week sprints. It contains ticket ownership, dependencies, estimates, demos, and contingency rules. The schedule remains a forecast; gate evidence determines completion.
 
@@ -16,13 +16,13 @@ The [sprint plan](sprint-plan.md) turns these gates into a 10-sprint baseline fo
 
 The CLI/configuration and event interfaces may be introduced as scaffolding in earlier milestones where needed for testing. M4 completes their supported user contract. Each milestone depends on the preceding exit gate; documentation will be updated alongside implementation rather than describing unimplemented work as released.
 
-Rust/toolchain and dependency versions are pinned in Sprint 1. The minimal FRR harness image will be pinned during M1, and the complete Containerlab topology and its images during M2. Release records will include the exact tested versions and fixture identity; no mutable `latest` tag will serve as a reproducibility claim.
+Rust/toolchain and dependency versions are pinned in Sprint 1. Sprint 2 pins Containerlab and the minimal FRR image by version and checksum/digest; the complete scenario topology and its images will be pinned during M2. Release records will include exact tested versions and fixture identity; no mutable `latest` tag will serve as a reproducibility claim.
 
 ## Documentation acceptance
 
 M0 is complete when:
 
-- All eight documents, including the sprint plan, are present, in English, and linked from the index.
+- All eight baseline documents, including the sprint plan, are present, in English, and linked from the index. Implementation guides are added alongside them as capabilities become available.
 - Implemented capabilities and runnable examples are distinguished from planned runtime behavior.
 - Relative file links and section anchors resolve; fenced examples and tables are well formed.
 - Mermaid diagrams parse successfully and agree with the text's component responsibilities and lifecycle.

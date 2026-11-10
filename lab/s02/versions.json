@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "fixture_id": "bgp-codec-s02-v1",
+  "containerlab_version": "0.83.0",
+  "containerlab_archive_url": "https://github.com/srl-labs/containerlab/releases/download/v0.83.0/containerlab_0.83.0_linux_amd64.tar.gz",
+  "containerlab_archive_sha256": "1ee43b8fd5979d8baa205e267480d69177f7461b2d1bf512df144800c08cfe2c",
+  "containerlab_binary_sha256": "780bf9fb99197a2f37f636777232e2a72ad386b0430dac1c26d253cbd844fd49",
+  "checksums_url": "https://github.com/srl-labs/containerlab/releases/download/v0.83.0/checksums.txt",
+  "frr_version": "10.7.1",
+  "frr_image": "quay.io/frrouting/frr:10.7.1@sha256:e995beaa50fdc9edb35eadcfefa29b7f062cc06f2b812613789b68fa541554d2"
+}
