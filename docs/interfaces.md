@@ -1,16 +1,23 @@
 # CLI, configuration, and artifacts
 
-**Status: planned.** The commands, configuration, and artifact examples below specify a proposed interface. No `bgp-hijack` binary or referenced lab fixture is available yet.
+**Status: partially implemented (Sprint 1).** The `bgp-hijack` binary implements `validate --static`. Configuration and evidence/result types are available in the core library. Live validation, `run`, artifact-based `report`, and the referenced lab fixture remain planned.
 
 ## Commands
 
 | Command | Inputs | Behavior |
 | --- | --- | --- |
+| `validate --static` | `--config <yaml>` | **Implemented:** file-only schema and value validation. Successful JSON includes `scope: "static"` and `runtime_verified: false`; the topology need not exist. |
 | `validate` | `--config <yaml>` | Validate the configuration and inspect the prepared lab's inventory, isolation, and declared compatibility without activating a scenario. |
 | `run` | `--config <yaml> --output <new-directory>` | Repeat preflight, negotiate required sessions, establish baseline, execute in the foreground, roll back, and write artifacts. |
 | `report` | `--run <artifact-directory>` | Re-evaluate saved evidence offline and print a JSON report to stdout. No live network access or mutation of the saved run. |
 
-Illustrative commands for a future implementation:
+Currently executable example:
+
+```sh
+cargo run --locked -p bgp-hijack -- validate --config examples/lab-forward.yaml --static
+```
+
+Planned live/artifact commands (currently return code `2` with an explicit unsupported-operation error):
 
 ```sh
 bgp-hijack validate --config lab-forward.yaml
@@ -18,7 +25,7 @@ bgp-hijack run --config lab-forward.yaml --output artifacts/forward-001
 bgp-hijack report --run artifacts/forward-001
 ```
 
-The lab must already be prepared using its pinned Containerlab fixture. The first-release CLI will not deploy arbitrary topologies. `validate` will inspect fixture declarations and available lab state; actual capability negotiation will occur during `run` before activation. A successful validation will not bypass the run's fresh checks.
+For future live validation and execution, the lab must already be prepared using its pinned Containerlab fixture. The first-release CLI will not deploy arbitrary topologies. Live `validate` will inspect fixture declarations and available lab state; actual capability negotiation will occur during `run` before activation. Successful static validation does not verify topology existence, real interfaces, isolation, peer capabilities, fixture membership, or measurement-budget adequacy and will not bypass the run's fresh checks.
 
 `run` will require a new output directory, refusing to overwrite an existing run. Diagnostics and progress will go to stderr. Its final JSON report will go to stdout and to `report.json`. `report` will print the regenerated report without replacing that original file. SIGINT and SIGTERM will initiate bounded rollback; an interruption will never be reported as an ordinary successful run.
 
@@ -34,7 +41,7 @@ An offline report of an interrupted run will use its evaluated verdict code, nor
 
 ## Proposed configuration
 
-The example is a design fixture, not a deployable topology. The referenced `reference.clab.yaml`, nodes, and interfaces will be supplied during the lab milestone.
+The example is accepted by the implemented static validator and is available as [examples/lab-forward.yaml](../examples/lab-forward.yaml). It is not a deployable topology. The referenced `reference.clab.yaml`, nodes, and interfaces will be supplied during the lab milestone.
 
 ```yaml
 schema_version: 1
@@ -93,15 +100,21 @@ capture_points:
 | `limits` | Explicit finite phase durations, total active deadline, probe budget, and capture budget. |
 | `capture_points` | Declared lab nodes/interfaces on which selected test traffic will be recorded. |
 
-All shown fields will be required in version 1. Durations are seconds. The active deadline starts with baseline collection and excludes the separately bounded recovery interval. The capture limit is aggregate bytes across capture points, and the probe budget is aggregate across enabled families for the entire run, including baseline and recovery. These example limits bound an experiment; they are not performance guarantees.
+All shown fields are required in version 1 except a prefix for an inactive family, which may be omitted. Durations are seconds. The active deadline starts with baseline collection and excludes the separately bounded recovery interval. The capture limit is aggregate bytes across capture points, and the probe budget is aggregate across enabled families for the entire run, including baseline and recovery. These example limits bound an experiment; they are not performance guarantees.
 
 The topology path will resolve relative to the YAML file. Output location will be supplied only by `--output`, avoiding conflicting output settings. The selected fixture will define the corresponding lab routes, policy profiles, next hops, and observation rules; YAML will not provide an arbitrary outbound BGP packet or public-peer interface.
 
-Version 1 validation will reject unknown fields, duplicate YAML keys, duplicate peer identities, noncanonical prefixes, undeclared nodes/interfaces, unsupported scenarios, and empty family selections. Prefixes and peer endpoints must belong to the fixture's declared closed address plan. Both configured and observed ASNs must match the fixture's private ASN inventory. Required families, captures, and test resources cannot be silently skipped.
+Implemented static validation rejects unknown fields, duplicate YAML keys, incorrect scalar types, duplicate peer identities/endpoints, noncanonical prefixes, undeclared node references, invalid interface-name syntax, unsupported scenarios, and empty/duplicate family selections. Inputs are limited to one UTF-8 document, 1 MiB, and 64 nesting levels; YAML anchors, aliases, merge keys, and unsupported tags are disabled. YAML is first parsed to scalar-preserving JSON values and then checked against the typed schema, with field paths retained in errors.
+
+The static address subset is IPv4 `192.0.2.0/24`, `198.51.100.0/24`, `203.0.113.0/24`, and IPv6 `2001:db8::/32`. Configured ASNs must be private-use values, and an eBGP peer must have a different ASN from the local one. The five node roles must be distinct; captures on source, experiment, and target are required. Interface names accept 1-15 ASCII letters, digits, '.', '_' or '-'. The first-release transport endpoints use IPv4, including experiments carrying IPv6 unicast routes.
+
+Future live validation will additionally check actual interfaces, fixture address/ASN membership, observed peer identity, and observation readiness. Required families, captures, and test resources cannot be silently skipped.
 
 Each family must have its corresponding prefix and endpoint measurements. Peer addresses must resolve to the declared lab interface in the actual topology. Duration and packet budgets must permit the fixture's baseline, observation, and recovery measurements. Failure to prove these conditions will prevent activation.
 
 ## Artifact layout
+
+Sprint 1 implements the serializable `EventEnvelope`, `Manifest`, `AssertionResult`, and `RunSummary` types in `bgp-hijack-core`. It does not write journals, generate runtime events, or read/verify run artifacts. Deserializing these types alone does not validate a run's schema compatibility, artifact paths, integrity, or completeness; those checks belong to the future artifact reader.
 
 The run directory will contain:
 
@@ -125,6 +138,8 @@ snapshots/
 
 The manifest will be initialized before mutation and finalized after recovery/reporting. Evidence references will be relative to the run directory, and readers will reject references escaping that directory. Finalized artifacts will have recorded sizes and hashes. An interrupted run may lack a final report or finalized hashes; its incomplete state must remain distinguishable from verified artifacts.
 
+The implemented manifest fields are `schema_version`, `run_id`, `started_at`, `configuration`, `fixture_id`, `fixture_version`, `software_versions`, `image_identities`, `artifacts`, and `complete`. Each artifact entry contains `path`, nullable `size_bytes` and `sha256`, and `complete`; unknown integrity data remains `null`. Version and image identities are string maps. `started_at` uses the same UTC timestamp representation as events.
+
 ## Event envelope
 
 | Field | Meaning |
@@ -142,7 +157,7 @@ The manifest will be initialized before mutation and finalized after recovery/re
 | `evidence_refs` | Relative artifact references supporting the observation. |
 | `details` | Kind-specific payload; route/session events include the session epoch. |
 
-Initial event kinds will be `phase.changed`, `session.changed`, `route.observed`, `peer_policy.observed`, `probe.observed`, `mutation.recorded`, `recovery.recorded`, `evidence.gap`, and `assertion.evaluated`.
+The implemented event-kind names are `phase.changed`, `session.changed`, `route.observed`, `peer_policy.observed`, `probe.observed`, `mutation.recorded`, `recovery.recorded`, `evidence.gap`, and `assertion.evaluated`. `details` currently accepts JSON objects; specific payload types will accompany their producers. Serialization normalizes timestamps to UTC. The CLI does not emit placeholder events.
 
 Illustrative event, unrelated to an actual run:
 
@@ -175,6 +190,8 @@ Origin ASNs will be recorded as observations, not as an `attacker_asn` attributi
 
 Reports will include `schema_version`, `run_id`, `scenario`, `policy_profile`, `result`, per-family `assertions`, `cleanup_status`, and `evidence_gaps`. Each assertion will identify its expectation, observation, verdict, and evidence references. Cleanup status will be `completed`, `failed`, or `unverified`.
 
+The implemented `AssertionResult` fields are `id`, `address_family`, `expectation`, `observation`, `result`, and `evidence_refs`. The pure evaluator takes expected `(id, address_family)` keys, observations, enabled families, completion/interruption flags, cleanup status, and evidence gaps. Empty or duplicate requirements, missing family coverage, duplicate/unexpected observations, blank observations, or missing evidence references cannot produce `passed`. A supported failure with evidence takes precedence over incomplete data. Evidence references are assessed for presence only in Sprint 1; the caller supplies trusted observations and cleanup status.
+
 Aggregation order is fixed:
 
 1. A conclusively violated assertion, including a proven recovery failure, produces `failed`.
@@ -185,4 +202,4 @@ A dual-family run requires both families to pass. A successful `reject` policy i
 
 The offline evaluator will share the live evaluator's rules. It will check the manifest, event sequence, schema compatibility, and referenced artifacts. A truncated final journal record will be treated as interrupted evidence; earlier complete records remain usable. A missing artifact or integrity mismatch prevents any dependent assertion from passing. The reader will never fabricate missing events to obtain a passing result.
 
-Schema version `1` is a planned contract. Future incompatible changes will require an explicit new schema version and compatibility notes. Reports will not claim to replay BGP traffic: this command re-evaluates saved evidence only.
+Schema version `1` is the implemented model contract; runtime production and artifact validation remain planned. Future incompatible changes will require an explicit new schema version and compatibility notes. Reports will not claim to replay BGP traffic: this command re-evaluates saved evidence only.

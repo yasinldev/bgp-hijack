@@ -1,0 +1,11 @@
+[
+  {"name":"complete dual family", "results":["passed","passed"], "completed":true, "interrupted":false, "cleanup":"completed", "gap":false, "want":"passed"},
+  {"name":"proven failure", "results":["failed","passed"], "completed":true, "interrupted":false, "cleanup":"completed", "gap":false, "want":"failed"},
+  {"name":"failure precedes uncertainty", "results":["failed","inconclusive"], "completed":false, "interrupted":true, "cleanup":"unverified", "gap":true, "want":"failed"},
+  {"name":"unknown assertion", "results":["inconclusive","passed"], "completed":true, "interrupted":false, "cleanup":"completed", "gap":false, "want":"inconclusive"},
+  {"name":"unfinished", "results":["passed","passed"], "completed":false, "interrupted":false, "cleanup":"completed", "gap":false, "want":"inconclusive"},
+  {"name":"interrupted", "results":["passed","passed"], "completed":true, "interrupted":true, "cleanup":"completed", "gap":false, "want":"inconclusive"},
+  {"name":"unverified recovery", "results":["passed","passed"], "completed":true, "interrupted":false, "cleanup":"unverified", "gap":false, "want":"inconclusive"},
+  {"name":"failed recovery", "results":["passed","passed"], "completed":true, "interrupted":false, "cleanup":"failed", "gap":false, "want":"failed"},
+  {"name":"capture gap", "results":["passed","passed"], "completed":true, "interrupted":false, "cleanup":"completed", "gap":true, "want":"inconclusive"}
+]

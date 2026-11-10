@@ -1,0 +1,7 @@
+/target/
+/artifacts/
+/clab-*/
+*.pcap
+*.pcapng
+!**/fixtures/**/*.pcap
+!**/fixtures/**/*.pcapng

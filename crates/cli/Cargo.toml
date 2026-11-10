@@ -1,0 +1,25 @@
+[package]
+name = "bgp-hijack"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Offline configuration validation for BGP Hijack Lab"
+
+[[bin]]
+name = "bgp-hijack"
+path = "src/main.rs"
+
+[dependencies]
+bgp-hijack-core = { path = "../core" }
+clap.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+serde_json.workspace = true
+
+[lints]
+workspace = true

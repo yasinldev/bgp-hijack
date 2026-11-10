@@ -1,6 +1,6 @@
 # Architecture
 
-**Status: planned.** This document assigns responsibilities to future components; no implementation is present yet.
+**Status: partially implemented (Sprint 1).** Shared models, static configuration validation, pure result evaluation, and CLI scaffolding are implemented. The protocol engine, live lab adapter, route store, journal, and packet observation components described below remain planned.
 
 ## Component boundaries
 

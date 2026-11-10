@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "run_id": "example-run",
+  "sequence": 12,
+  "timestamp": "2026-11-08T12:00:00Z",
+  "elapsed_ms": 5000,
+  "kind": "assertion.evaluated",
+  "source_node": "client",
+  "peer_id": null,
+  "address_family": "ipv4",
+  "prefix": "192.0.2.0/24",
+  "evidence_refs": ["snapshots/ipv4-baseline.json", "captures/client.pcapng"],
+  "details": {"assertion": "baseline_delivery", "result": "passed"}
+}

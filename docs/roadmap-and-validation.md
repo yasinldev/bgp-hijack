@@ -1,12 +1,14 @@
 # Roadmap and validation
 
-**Status: planned.** This document defines future implementation gates. The documentation milestone delivers the specification; it does not imply that any protocol or lab test has already passed.
+**Status: implementation started; protocol and lab gates remain planned.** Sprint 1 provides the Rust workspace, offline static validation, shared evidence models, and pure verdict evaluation. Local verification and outstanding review/remote CI are recorded in the [Sprint 1 implementation record](sprint-plan.md#sprint-1-implementation-record). No protocol or live lab acceptance gate has passed.
+
+The [sprint plan](sprint-plan.md) turns these gates into a 10-sprint baseline for two developers working in two-week sprints. It contains ticket ownership, dependencies, estimates, demos, and contingency rules. The schedule remains a forecast; gate evidence determines completion.
 
 ## Milestones
 
 | Milestone | Deliverable | Exit gate |
 | --- | --- | --- |
-| M0: documentation | The seven linked documents, accepted decisions, diagrams, interface examples, and acceptance matrix. | Document checks below pass and the first-release contracts agree across files. |
+| M0: documentation | The core design documents, sprint plan, accepted decisions, diagrams, interface examples, and acceptance matrix. | Document checks below pass and the first-release contracts agree across files. |
 | M1: protocol core | Rust workspace; bounded codec; peer FSM; four-octet ASNs; IPv4/IPv6 unicast; minimal isolated FRR peer harness. | Unit, property/fuzz, timer, and FRR interoperability checks cover the supported protocol subset. |
 | M2: lab and state | Pinned Containerlab fixture; inventory/isolation checks; route store; baseline collection; recovery journal. | Baseline works for both families; peer/order/recovery faults cannot create stale state or bypass isolation. |
 | M3: scenarios | `forward` and `blackhole` with `accept`/`reject` policies. | All eight scenario/family/policy rows pass with independently observed control and data planes. |
@@ -14,20 +16,21 @@
 
 The CLI/configuration and event interfaces may be introduced as scaffolding in earlier milestones where needed for testing. M4 completes their supported user contract. Each milestone depends on the preceding exit gate; documentation will be updated alongside implementation rather than describing unimplemented work as released.
 
-Rust/toolchain and dependency versions, together with the minimal FRR harness image, will be pinned in M1. The complete Containerlab topology and its images will be pinned in M2. Release records will include the exact tested versions and fixture identity; no mutable `latest` tag will serve as a reproducibility claim.
+Rust/toolchain and dependency versions are pinned in Sprint 1. The minimal FRR harness image will be pinned during M1, and the complete Containerlab topology and its images during M2. Release records will include the exact tested versions and fixture identity; no mutable `latest` tag will serve as a reproducibility claim.
 
 ## Documentation acceptance
 
 M0 is complete when:
 
-- All seven documents are present, in English, and linked from the index.
-- Runtime capabilities and examples are marked as planned.
+- All eight documents, including the sprint plan, are present, in English, and linked from the index.
+- Implemented capabilities and runnable examples are distinguished from planned runtime behavior.
 - Relative file links and section anchors resolve; fenced examples and tables are well formed.
 - Mermaid diagrams parse successfully and agree with the text's component responsibilities and lifecycle.
 - YAML and JSON examples parse and agree with the documented field names, enums, units, and constraints.
 - Every scenario has explicit preconditions, control-plane evidence, traffic evidence, failure behavior, and recovery requirements.
 - The IPv4/IPv6 and accepting/rejecting policy matrix is complete, with no scope contradictions between documents.
 - Standards and platform references use primary sources; unsupported performance claims are absent.
+- Sprint ticket IDs are unique, dependencies resolve without cycles, and estimates fit the declared two-developer capacity.
 
 No Rust test suite is required merely to add these documents. Documentation checks will not be reported as protocol or runtime validation.
 

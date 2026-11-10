@@ -1,0 +1,45 @@
+# Static-validation example. The referenced topology is a future lab fixture.
+schema_version: 1
+lab:
+  id: reference
+  topology: reference.clab.yaml
+  nodes:
+    source: client
+    transit: transit
+    target_router: target-router
+    target: target
+    experiment: experiment
+  prefixes:
+    ipv4: 192.0.2.0/24
+    ipv6: 2001:db8:100::/48
+address_families:
+  - ipv4
+  - ipv6
+engine:
+  local_asn: 4200000001
+  router_id: 203.0.113.1
+  peers:
+    - id: transit
+      node: transit
+      interface: lab-transit
+      local_address: 198.51.100.1
+      remote_address: 198.51.100.2
+      remote_asn: 4200000002
+scenario:
+  kind: forward
+  policy_profile: accept
+limits:
+  baseline_seconds: 5
+  convergence_timeout_seconds: 30
+  observation_seconds: 10
+  active_timeout_seconds: 120
+  recovery_timeout_seconds: 30
+  max_probe_packets: 1000
+  capture_max_bytes: 16777216
+capture_points:
+  - node: client
+    interface: lab-transit
+  - node: experiment
+    interface: lab-transit
+  - node: target
+    interface: lab-router
